@@ -5,7 +5,7 @@ import Models.Client;
 
 import java.util.List;
 
-public class ClientController
+public class ClientController implements IClientRepository
 {
     IClientRepository _context;
 
@@ -25,7 +25,9 @@ public class ClientController
         for (Client client : clients)
         {
             if(_context.AddClient(client))
+            {
                 res++;
+            }
         }
         return res;
     }

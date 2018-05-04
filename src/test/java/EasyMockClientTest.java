@@ -1,6 +1,5 @@
 import Controllers.ClientController;
 import Interfaces.IClientRepository;
-import Interfaces.IDbContext;
 import Models.Client;
 import org.easymock.EasyMock;
 import org.easymock.EasyMockSupport;
@@ -190,7 +189,7 @@ public class EasyMockClientTest extends EasyMockSupport
 
     @Test void CheckEditClientSurnname_ShouldEdit()
     {
-        dbMock.EditClientName(eq(NEW_NAME), eq(client));
+        dbMock.EditClientSurname(eq(NEW_NAME), eq(client));
         EasyMock.expectLastCall().andAnswer(() ->
         {
             Object[] args = getCurrentArguments();
@@ -204,14 +203,14 @@ public class EasyMockClientTest extends EasyMockSupport
         });
         replay(dbMock);
 
-        clientController.EditClientName(NEW_NAME, client);
+        clientController.EditClientSurname(NEW_NAME, client);
         assertEquals(NEW_NAME, client.Name);
         verify(dbMock);
     }
 
     @Test void CheckEditClientEmail_ShouldEdit()
     {
-        dbMock.EditClientName(eq(NEW_NAME), eq(client));
+        dbMock.EditClientEmail(eq(NEW_NAME), eq(client));
         EasyMock.expectLastCall().andAnswer(() ->
         {
             Object[] args = getCurrentArguments();
@@ -225,7 +224,7 @@ public class EasyMockClientTest extends EasyMockSupport
         });
         replay(dbMock);
 
-        clientController.EditClientName(NEW_NAME, client);
+        clientController.EditClientEmail(NEW_NAME, client);
         assertEquals(NEW_NAME, client.Name);
         verify(dbMock);
     }

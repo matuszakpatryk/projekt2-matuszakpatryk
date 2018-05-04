@@ -20,10 +20,11 @@ public interface IDbContext
     List<Product> GetAllProducts();
     boolean DeleteProduct(Product product);
     void EditProductPrice(double price, Product product);
+    void EditProductQuantity(int quantity, Product product);
 
-    List<Sell> GetClientsSell(Client client);
-    List<Product> GetProductsSell(Sell sell);
-    boolean CreateOrder(Product product, Sell sell);
+    List<Sell> GetClientSells(Client client);
+    List<Product> GetProductSells(Sell sell);
+    boolean CreateSell(Product product, Sell sell);
 
     boolean AddSell(Sell sell);
     Sell GetSellById(int id);

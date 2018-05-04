@@ -187,7 +187,19 @@ public class AppDbContextMock implements IDbContext
     }
 
     @Override
-    public List<Sell> GetClientsSell(Client client)
+    public void EditProductQuantity(int quantity, Product _product)
+    {
+        for (Product product : _products)
+        {
+            if(product.equals(_product))
+            {
+                product.Quantity = quantity;
+            }
+        }
+    }
+
+    @Override
+    public List<Sell> GetClientSells(Client client)
     {
         List<Sell> clientSells = new ArrayList<>();
 
@@ -202,7 +214,7 @@ public class AppDbContextMock implements IDbContext
     }
 
     @Override
-    public List<Product> GetProductsSell(Sell sell)
+    public List<Product> GetProductSells(Sell sell)
     {
         List<Product> products = new ArrayList<>();
 
@@ -217,7 +229,7 @@ public class AppDbContextMock implements IDbContext
     }
 
     @Override
-    public boolean CreateOrder(Product product, Sell sell)
+    public boolean CreateSell(Product product, Sell sell)
     {
         if(_products.contains(product) && _sells.contains(sell))
         {
