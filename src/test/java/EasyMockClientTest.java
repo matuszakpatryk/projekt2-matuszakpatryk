@@ -54,7 +54,7 @@ public class EasyMockClientTest extends EasyMockSupport
     }
 
     @Test
-    void CheckAddClient_ShouldAddNewClient()
+    void CheckAddClient_ShouldAddNewClientTest()
     {
         expect(dbMock.AddClient(client)).andReturn(true);
         replay(dbMock);
@@ -63,7 +63,8 @@ public class EasyMockClientTest extends EasyMockSupport
         verify(dbMock);
     }
 
-    @Test void CheckAddCLient_ShouldNotAddNewCLient ()
+    @Test
+    void CheckAddClient_ShouldNotAddNewClientTest()
     {
         expect(dbMock.AddClient(client)).andReturn(false);
         replay(dbMock);
@@ -72,7 +73,8 @@ public class EasyMockClientTest extends EasyMockSupport
         verify(dbMock);
     }
 
-    @Test void CheckAddWronglyClient_ShouldThrownException ()
+    @Test
+    void CheckAddClient_ShouldThrownExceptionWhenClientIsNotCorrectTest()
     {
         expect(dbMock.AddClient(client)).andThrow(new IllegalArgumentException("Wrong!"));
         replay(dbMock);
@@ -84,7 +86,7 @@ public class EasyMockClientTest extends EasyMockSupport
         verify(dbMock);
     }
 
-    @Test void CheckAddMultipleClients_ShouldReturnProperCount ()
+    @Test void CheckAddClient_ShouldReturnProperCountTest()
     {
         Client client2 = new Client(CLIENT_NAME2, CLIENT_SURNAME2, CLIENT_EMAIL2);
         Client client3 = new Client(CLIENT_NAME3, CLIENT_SURNAME3, CLIENT_EMAIL3);
@@ -100,7 +102,8 @@ public class EasyMockClientTest extends EasyMockSupport
         verify(dbMock);
     }
 
-    @Test void CheckAddMultipleClients_ShouldNotAddEveryClient ()
+    @Test
+    void CheckAddClient_ShouldNotAddEveryClientTest()
     {
         Client client2 = new Client(CLIENT_NAME2, CLIENT_SURNAME2, CLIENT_EMAIL2);
         Client client3 = new Client(CLIENT_NAME3, CLIENT_SURNAME3, CLIENT_EMAIL3);
@@ -116,7 +119,8 @@ public class EasyMockClientTest extends EasyMockSupport
         verify(dbMock);
     }
 
-    @Test void CheckGetClientByName_ShouldReturnProperClient ()
+    @Test
+    void CheckGetClientByName_ShouldReturnProperClientTest()
     {
         expect(dbMock.GetClientByName(CLIENT_NAME)).andReturn(client);
         replay(dbMock);
@@ -125,7 +129,8 @@ public class EasyMockClientTest extends EasyMockSupport
         verify(dbMock);
     }
 
-    @Test void CheckGetAllClient_EmptyDB_ShouldReturnEmptyList ()
+    @Test
+    void CheckGetAllClients_ShouldReturnEmptyListTest()
     {
         expect(dbMock.GetAllClients()).andReturn(new ArrayList<>());
         replay(dbMock);
@@ -134,7 +139,8 @@ public class EasyMockClientTest extends EasyMockSupport
         verify(dbMock);
     }
 
-    @Test void CheckGetAllClients_ShouldReturnProperValue ()
+    @Test
+    void CheckGetAllClients_ShouldReturnProperValue ()
     {
         Client client2 = new Client(CLIENT_NAME2, CLIENT_SURNAME2, CLIENT_EMAIL2);
         Client client3 = new Client(CLIENT_NAME3, CLIENT_SURNAME3, CLIENT_EMAIL3);
@@ -148,7 +154,8 @@ public class EasyMockClientTest extends EasyMockSupport
         verify(dbMock);
     }
 
-    @Test void CheckDeleteClient_ShouldDeleteClient ()
+    @Test
+    void CheckDeleteClient_ShouldDeleteClientTest()
     {
         expect(dbMock.DeleteClient(client)).andReturn(true);
         replay(dbMock);
@@ -157,8 +164,9 @@ public class EasyMockClientTest extends EasyMockSupport
         verify(dbMock);
     }
 
-    @Test void CheckDeleteClient_ClientDontExists_ShouldReturnFalse ()
-    {
+    @Test
+    void CheckDeleteClient_ShouldReturnFalseWhenClientNotExists()
+        {
         expect(dbMock.DeleteClient(client)).andReturn(true);
         replay(dbMock);
 
@@ -166,7 +174,8 @@ public class EasyMockClientTest extends EasyMockSupport
         verify(dbMock);
     }
 
-    @Test void CheckEditClientName_ShouldEdit ()
+    @Test
+    void CheckEditClientName_ShouldEditClientNameTest()
     {
         dbMock.EditClientName(eq(NEW_NAME), eq(client));
         EasyMock.expectLastCall().andAnswer(() ->
@@ -187,7 +196,7 @@ public class EasyMockClientTest extends EasyMockSupport
         verify(dbMock);
     }
 
-    @Test void CheckEditClientSurnname_ShouldEdit()
+    @Test void CheckEditClientSurnname_ShouldEditClientSurnameTest()
     {
         dbMock.EditClientSurname(eq(NEW_NAME), eq(client));
         EasyMock.expectLastCall().andAnswer(() ->
@@ -208,7 +217,8 @@ public class EasyMockClientTest extends EasyMockSupport
         verify(dbMock);
     }
 
-    @Test void CheckEditClientEmail_ShouldEdit()
+    @Test
+    void CheckEditClientEmail_ShouldEditClientEmailTest()
     {
         dbMock.EditClientEmail(eq(NEW_NAME), eq(client));
         EasyMock.expectLastCall().andAnswer(() ->

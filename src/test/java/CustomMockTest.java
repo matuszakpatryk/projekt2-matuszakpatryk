@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CustomMockTest
@@ -21,10 +22,6 @@ public class CustomMockTest
     private final String CLIENT_NAME2 = "Marek";
     private final String CLIENT_SURNAME2 = "Tatarek";
     private final String CLIENT_EMAIL2 = "testtt@gmail.com";
-
-    private final String CLIENT_NAME3 = "Michal";
-    private final String CLIENT_SURNAME3 = "Kichal";
-    private final String CLIENT_EMAIL3 = "tescik@gmail.com";
 
     private final String NEW_NAME = "Weronika";
     private final String NEW_SURNAME = "Blika";
@@ -43,6 +40,7 @@ public class CustomMockTest
     private final int PRODUCT_QUANTITY3 = 30;
 
     private final double NEW_PRICE = 11.11;
+    private final int NEW_QUANTITY = 125;
 
     private Sell sell;
     private Client client;
@@ -60,19 +58,169 @@ public class CustomMockTest
     }
 
     @Test
-    void CheckAddSell_ShouldAddSell ()
+    void CheckAddClient_ShouldNotAddNullClientTest()
+    {
+        boolean result = dbMock.AddClient(null);
+        assertFalse(result);
+    }
+
+    @Test
+    void CheckGetClientByName_ShouldReturnProperValueTest()
+    {
+        dbMock.AddClient(client);
+        assertThat(dbMock.GetClientByName(CLIENT_NAME).equals(client));
+    }
+
+    @Test
+    void CheckGetClientByName_ShouldReturnNullWhenNameIsNotCorrectTest()
+    {
+        dbMock.AddClient(client);
+        assertNull(dbMock.GetClientByName("ThereIsNoNameLikeThat"));
+    }
+
+    @Test
+    void CheckGetAllClients_ShouldReturnProperListTest()
+    {
+        Client client2 = new Client(CLIENT_NAME2, CLIENT_SURNAME2, CLIENT_EMAIL2);
+        dbMock.AddClient(client);
+        dbMock.AddClient(client2);
+
+        assertThat(dbMock.GetAllClients()).hasSize(2);
+    }
+
+    @Test
+    void DeleteClient_ShouldReturnFalseWhenClientIsNullTest()
+    {
+        assertFalse(dbMock.DeleteClient(null));
+    }
+
+    @Test
+    void DeleteClient_ShouldReturnFalseWhenClientIsNotInDbTest()
+    {
+        Client client2 = new Client(CLIENT_NAME2, CLIENT_SURNAME2, CLIENT_EMAIL2);
+        assertFalse(dbMock.DeleteClient(client2));
+    }
+
+    @Test
+    void DeleteClient_ShouldReturnTrueWhenClientIsCorrectTest()
+    {
+        Client client2 = new Client(CLIENT_NAME2, CLIENT_SURNAME2, CLIENT_EMAIL2);
+        dbMock.AddClient(client2);
+        assertTrue(dbMock.DeleteClient(client2));
+    }
+
+    @Test
+    void EditClientName_ShouldChangeNameTest()
+    {
+        Client client2 = new Client(CLIENT_NAME2, CLIENT_SURNAME2, CLIENT_EMAIL2);
+        dbMock.AddClient(client2);
+        dbMock.EditClientName(NEW_NAME, client2);
+        assertThat(dbMock.GetClientByName(NEW_NAME)).isNotNull();
+    }
+
+    @Test
+    void EditClientSurname_ShouldChangeSurnameTest()
+    {
+        Client client2 = new Client(CLIENT_NAME2, CLIENT_SURNAME2, CLIENT_EMAIL2);
+        dbMock.AddClient(client2);
+        dbMock.EditClientSurname(NEW_SURNAME, client2);
+        assertThat(dbMock.GetClientByName(CLIENT_NAME2).Surname.equals(NEW_SURNAME));
+    }
+
+    @Test
+    void EditClientEmail_ShouldChangeEmailTest()
+    {
+        Client client2 = new Client(CLIENT_NAME2, CLIENT_SURNAME2, CLIENT_EMAIL2);
+        dbMock.AddClient(client2);
+        dbMock.EditClientEmail(NEW_EMAIL, client2);
+        assertThat(dbMock.GetClientByName(CLIENT_NAME2).Email.equals(NEW_EMAIL));
+    }
+
+    @Test
+    void AddProduct_ShouldReturnFalseWhenProductIsNull()
+    {
+        assertFalse(dbMock.AddProduct(null));
+    }
+
+    @Test
+    void GetProductByName_ShouldReturnProperProduct()
+    {
+        Product product = new Product(PRODUCT_NAME, PRODUCT_PRICE, PRODUCT_QUANTITY);
+        dbMock.AddProduct(product);
+        assertThat(dbMock.GetProductByName(PRODUCT_NAME).Name.equals(PRODUCT_NAME));
+    }
+
+    @Test
+    void GetProductByName_ShouldReturnNullWhenProductIsNotFound()
+    {
+        assertNull(dbMock.GetProductByName("Nie znajdzie"));
+    }
+
+    @Test
+    void GetAllProducts_ShouldReturnProperListOfProducts()
+    {
+        Product product = new Product(PRODUCT_NAME, PRODUCT_PRICE, PRODUCT_QUANTITY);
+        Product product2 = new Product(PRODUCT_NAME2, PRODUCT_PRICE2, PRODUCT_QUANTITY2);
+
+        dbMock.AddProduct(product);
+        dbMock.AddProduct(product2);
+
+        assertThat(dbMock.GetAllProducts()).hasSize(2);
+    }
+
+    @Test
+    void DeleteProduct_ShouldReturnFalseWhenProductIsNullTest()
+    {
+        assertFalse(dbMock.DeleteProduct(null));
+    }
+
+    @Test
+    void DeleteProduct_ShouldReturnFalseWhenProductIsNotInDbTest()
+    {
+        Product product = new Product(PRODUCT_NAME, PRODUCT_PRICE, PRODUCT_QUANTITY);
+        assertFalse(dbMock.DeleteProduct(product));
+    }
+
+    @Test
+    void DeleteProduct_ShouldReturnTrueWhenProductIsCorrectTest()
+    {
+        Product product = new Product(PRODUCT_NAME, PRODUCT_PRICE, PRODUCT_QUANTITY);
+        dbMock.AddProduct(product);
+        assertTrue(dbMock.DeleteProduct(product));
+    }
+
+    @Test
+    void EditProductPrice_ShouldChangePrice()
+    {
+        Product product = new Product(PRODUCT_NAME, PRODUCT_PRICE, PRODUCT_QUANTITY);
+        dbMock.AddProduct(product);
+        dbMock.EditProductPrice(NEW_PRICE, product);
+        assertThat(dbMock.GetProductByName(PRODUCT_NAME).Price).isEqualTo(NEW_PRICE);
+    }
+
+    @Test
+    void EditProductQuantity_ShouldChangeQuantity()
+    {
+        Product product = new Product(PRODUCT_NAME, PRODUCT_PRICE, PRODUCT_QUANTITY);
+        dbMock.AddProduct(product);
+        dbMock.EditProductQuantity(NEW_QUANTITY, product);
+        assertThat(dbMock.GetProductByName(PRODUCT_NAME).Quantity).isEqualTo(NEW_QUANTITY);
+    }
+
+    @Test
+    void CheckAddSell_ShouldAddSellTest()
     {
         boolean resultult = sellController.AddSell(sell);
         assertTrue(resultult);
     }
 
-    @Test void CheckAddWronglySell_ShouldReturnFalse ()
+    @Test void CheckAddWronglySell_ShouldReturnFalseTest()
     {
         boolean result = sellController.AddSell(null);
         assertFalse(result);
     }
 
-    @Test void CheckAddGetSell_ShouldReturnProperSell ()
+    @Test void CheckAddGetSell_ShouldReturnProperSellTest()
     {
         dbMock.AddSell(sell);
         Sell result = sellController.GetSellById(0);
@@ -80,7 +228,7 @@ public class CustomMockTest
         assertThat(result).isEqualTo(sell);
     }
 
-    @Test void CheckGetSell_SellDoesNotExist ()
+    @Test void CheckGetSell_SellDoesNotExistTest()
     {
         dbMock.AddSell(sell);
         Sell result = sellController.GetSellById(2);
@@ -88,26 +236,26 @@ public class CustomMockTest
         assertThat(result).isEqualTo(null);
     }
 
-    @Test void CheckDeleteSell_ShouldDeleteReturnTrue ()
+    @Test void CheckDeleteSell_ShouldDeleteReturnTrueTest()
     {
         dbMock.AddSell(sell);
         assertTrue(sellController.DeleteSell(sell));
     }
 
-    @Test void CheckDeleteSell_SellDoesNotExists_ShouldReturnFalse ()
+    @Test void CheckDeleteSell_SellDoesNotExists_ShouldReturnFalseTest()
     {
         dbMock.AddSell(sell);
         Sell ord = new Sell(0);
         assertFalse(sellController.DeleteSell(ord));
     }
 
-    @Test void CheckGetClientSells_SellsDoesNotExists_ShouldReturnEmptyList ()
+    @Test void CheckGetClientSells_SellsDoesNotExists_ShouldReturnEmptyListTest()
     {
         dbMock.AddClient(client);
         assertThat(sellController.GetClientSells(client)).isEmpty();
     }
 
-    @Test void CheckGetClientSells_ShouldReturnProperValue ()
+    @Test void CheckGetClientSells_ShouldReturnProperValueTest()
     {
         dbMock.AddClient(client);
         sellController.AddSell(sell);
@@ -118,7 +266,7 @@ public class CustomMockTest
         assertThat(sellController.GetClientSells(client)).hasSize(4).contains(sell);
     }
 
-    @Test void CheckGetClientSells_TwoClients_ShouldReturnProperValue ()
+    @Test void CheckGetClientSells_TwoClients_ShouldReturnProperValueTest()
     {
         Client client2 = new Client(CLIENT_NAME, CLIENT_SURNAME, CLIENT_EMAIL);
         Sell sell2 = new Sell( 1);
@@ -139,7 +287,7 @@ public class CustomMockTest
         assertThat(sellController.GetClientSells(client2)).hasSize(3).contains(sell2);
     }
 
-    @Test void CheckCreateSell_ShouldCreate ()
+    @Test void CheckCreateSell_ShouldCreateTest()
     {
         Product product = new Product(PRODUCT_NAME, PRODUCT_PRICE, PRODUCT_QUANTITY);
         dbMock.AddProduct(product);
@@ -148,7 +296,7 @@ public class CustomMockTest
         assertThat(sellController.CreateSell(product, sell)).isTrue();
     }
 
-    @Test void CheckCreateSell_ProductDoesNotExists_ShouldReturnFalse ()
+    @Test void CheckCreateSell_ProductDoesNotExists_ShouldReturnFalseTest()
     {
         Product product = new Product(PRODUCT_NAME, PRODUCT_PRICE, PRODUCT_QUANTITY);
         dbMock.AddSell(sell);
@@ -156,7 +304,7 @@ public class CustomMockTest
         assertThat(sellController.CreateSell(product, sell)).isFalse();
     }
 
-    @Test void CheckGetProductsBySell_SellDoesNotExists_ShouldReturnEmptyList ()
+    @Test void CheckGetProductsBySell_SellDoesNotExists_ShouldReturnEmptyListTest()
     {
         Product product = new Product(PRODUCT_NAME, PRODUCT_PRICE, PRODUCT_QUANTITY);
         dbMock.AddProduct(product);
@@ -165,7 +313,7 @@ public class CustomMockTest
         assertThat(sellController.GetProductSells(sell)).isEmpty();
     }
 
-    @Test void CheckGetProductsBySell_ShouldReturnProperList ()
+    @Test void CheckGetProductsBySell_ShouldReturnProperListTest()
     {
         Product product = new Product(PRODUCT_NAME, PRODUCT_PRICE, PRODUCT_QUANTITY);
         Product product2 = new Product(PRODUCT_NAME2, PRODUCT_PRICE2, PRODUCT_QUANTITY2);
@@ -183,7 +331,7 @@ public class CustomMockTest
         assertThat(sellController.GetProductSells(sell)).hasSize(3).containsOnly(product, product2, product3);
     }
 
-    @Test void CheckGetProductsBySell_FewSells_ShouldReturnProperList ()
+    @Test void CheckGetProductsBySell_FewSells_ShouldReturnProperListTest()
     {
         Product product = new Product(PRODUCT_NAME, PRODUCT_PRICE, PRODUCT_QUANTITY);
         Product product2 = new Product(PRODUCT_NAME2, PRODUCT_PRICE2, PRODUCT_QUANTITY2);
@@ -213,20 +361,4 @@ public class CustomMockTest
         assertThat(sellController.GetProductSells(sell2)).hasSize(8).contains(product, product, product);
         assertThat(sellController.GetProductSells(sell3)).hasSize(8).contains(product2, product3);
     }
-
-    @Test
-    void CheckAddClient_ShouldNotAddNullClient()
-    {
-        boolean result = dbMock.AddClient(null);
-        assertFalse(result);
-    }
-
-    @Test
-    void CheckGetClientByName_ShouldReturnProperValue()
-    {
-        dbMock.AddClient(client);
-        assertThat(dbMock.GetClientByName(CLIENT_NAME).equals(client));
-    }
-
-
 }

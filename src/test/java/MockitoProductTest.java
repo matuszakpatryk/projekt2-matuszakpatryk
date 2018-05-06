@@ -48,7 +48,7 @@ public class MockitoProductTest
     }
 
     @Test
-    void CheckAddProduct_ShouldAddNewProduct ()
+    void CheckAddProduct_ShouldAddNewProductTest()
     {
         when(dbMock.AddProduct(any(Product.class))).thenReturn(true);
 
@@ -56,7 +56,8 @@ public class MockitoProductTest
         verify(dbMock, times(1)).AddProduct(any(Product.class));
     }
 
-    @Test void CheckAddProduct_ShouldNotAddProduct ()
+    @Test
+    void CheckAddProduct_ShouldNotAddProductTest()
     {
         when(dbMock.AddProduct(any(Product.class))).thenReturn(false);
 
@@ -64,7 +65,8 @@ public class MockitoProductTest
         verify(dbMock, times(1)).AddProduct(any(Product.class));
     }
 
-    @Test void CheckAddWronglyProduct_ShouldThrowException ()
+    @Test
+    void CheckAddProduct_ShouldThrowExceptionWhenProductIsNotCorrectTest()
     {
         Product product = new Product("Smth", 10, 10);
         when(dbMock.AddProduct(any(Product.class))).thenThrow(new IllegalArgumentException("Wrong!"));
@@ -75,7 +77,8 @@ public class MockitoProductTest
         });
     }
 
-    @Test void CheckAddMultipleProducts_ShouldReturnProperValue ()
+    @Test
+    void CheckAddProducts_ShouldReturnProperValueTest()
     {
         Product product2 = new Product(PRODUCT_NAME2, PRODUCT_PRICE2, PRODUCT_QUANTITY2);
         Product product3 = new Product(PRODUCT_NAME3, PRODUCT_QUANTITY2, PRODUCT_QUANTITY3);
@@ -88,7 +91,8 @@ public class MockitoProductTest
         verify(dbMock, times(3)).AddProduct(any(Product.class));
     }
 
-    @Test void CheckAddMultipleProducts_ShouldNotAddEveryProduct ()
+    @Test
+    void CheckAddProduct_ShouldNotAddEveryProductTest()
     {
         Product product2 = new Product(PRODUCT_NAME2, PRODUCT_PRICE2, PRODUCT_QUANTITY2);
         Product product3 = new Product(PRODUCT_NAME3, PRODUCT_QUANTITY2, PRODUCT_QUANTITY3);
@@ -101,7 +105,8 @@ public class MockitoProductTest
         verify(dbMock, times(3)).AddProduct(any(Product.class));
     }
 
-    @Test void CheckGetProductByName_ShouldReturnProperProduct ()
+    @Test
+    void CheckGetProductByName_ShouldReturnProperProductTest()
     {
         doReturn(product).when(dbMock).GetProductByName(PRODUCT_NAME);
 
@@ -109,7 +114,8 @@ public class MockitoProductTest
         verify(dbMock, times(1)).GetProductByName(PRODUCT_NAME);
     }
 
-    @Test void CheckGetAllProducts_EmptyDB_ShouldReturnEmptyList ()
+    @Test
+    void CheckGetAllProducts_ShouldReturnEmptyListTest()
     {
         doReturn(new ArrayList<>()).when(dbMock).GetAllProducts();
 
@@ -117,7 +123,8 @@ public class MockitoProductTest
         verify(dbMock, times(1)).GetAllProducts();
     }
 
-    @Test void CheckGetAllProducts_ShouldReturnProperValue()
+    @Test
+    void CheckGetAllProducts_ShouldReturnProperValueTest()
     {
         Product product2 = new Product(PRODUCT_NAME2, PRODUCT_PRICE2, PRODUCT_QUANTITY2);
         Product product3 = new Product(PRODUCT_NAME3, PRODUCT_QUANTITY2, PRODUCT_QUANTITY3);
@@ -131,21 +138,24 @@ public class MockitoProductTest
         verify(dbMock, times(1)).GetAllProducts();
     }
 
-    @Test void CheckDeleteProduct_ShouldDeleteProduct()
+    @Test
+    void CheckDeleteProduct_ShouldDeleteProductTest()
     {
         when(dbMock.DeleteProduct(product)).thenReturn(true);
         assertThat(productController.DeleteProduct(product)).isTrue();
         verify(dbMock, times(1)).DeleteProduct(product);
     }
 
-    @Test void CheckDeleteProduct_ProductDontExists_ShouldReturnFalse()
+    @Test
+    void CheckDeleteProduct_ShouldReturnFalseTest()
     {
         when(dbMock.DeleteProduct(product)).thenReturn(false);
         assertThat(productController.DeleteProduct(product)).isFalse();
         verify(dbMock, times(1)).DeleteProduct(product);
     }
 
-    @Test void CheckEditProductPrice_ShouldEdit()
+    @Test
+    void CheckEditProductPrice_ShouldEditProductPriceTest()
     {
         doAnswer(invocationOnMock ->
         {
@@ -163,7 +173,8 @@ public class MockitoProductTest
         assertThat(product.Price).isEqualTo(NEW_PRICE);
     }
 
-    @Test void CheckEditProductQuantity_ShouldEdit()
+    @Test
+    void CheckEditProductQuantity_ShouldEditProductQuantityTest()
     {
         doAnswer(invocationOnMock ->
         {

@@ -162,7 +162,7 @@ public class AppDbContextMock implements IDbContext
         }
         else
         {
-            for (Client product : _clients)
+            for (Product product : _products)
             {
                 if (product.equals(_product))
                 {
